@@ -1,0 +1,3 @@
+#include "../sil_arm32r_nsh_bl/defconfig"
+
+# CONFIG_NCPUS is not set

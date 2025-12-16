@@ -1,0 +1,53 @@
+/****************************************************************************
+ * Copyright (C) 2025 Xiaomi Corporation
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.  The
+ * ASF licenses this file to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ ****************************************************************************/
+
+#include <nuttx/config.h>
+
+set +e
+
+#include "rcS.first"
+
+#ifdef CONFIG_FS_HOSTFS
+mount -t hostfs -o fs=./out/boot_path/ /host
+#endif
+
+#ifdef CONFIG_FS_V9FS
+mount -t v9fs -o trans=virtio,tag=host  /share
+#endif
+
+#include "rcS.last"
+
+#ifdef CONFIG_VELA_BL
+boot /host/vela_core0_user.elf
+boot /host/vela_core0.elf
+#endif
+
+#if defined(CONFIG_RPTUN_BMP) || defined(CONFIG_RPMSG_VIRTIO_BMP)
+    #ifdef CONFIG_BUILD_PROTECTED
+        boot /host/vela_core1_user.elf
+        boot /host/vela_core2_user.elf
+        boot /host/vela_core3_user.elf
+        boot /host/vela_core4_user.elf
+    #endif
+    boot /host/vela_core1.elf
+    boot /host/vela_core2.elf
+    boot /host/vela_core3.elf
+    boot /host/vela_core4.elf
+#endif
