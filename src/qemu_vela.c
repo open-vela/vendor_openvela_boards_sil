@@ -37,7 +37,7 @@
 #include <nuttx/mtd/mtd_log.h>
 #include <nuttx/mtd/configdata.h>
 #include <sys/param.h>
-#include <nuttx/lib/modlib.h>
+#include <nuttx/lib/elf.h>
 
 #ifdef CONFIG_LIBC_FDT
 #  include <libfdt.h>
